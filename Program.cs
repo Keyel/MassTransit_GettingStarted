@@ -36,14 +36,26 @@ public class Program
                     x.AddSagas(entryAssembly);
                     x.AddActivities(entryAssembly);
 
-                    x.UsingInMemory((context, cfg) =>
+                    x.UsingRabbitMq((context, cfg) =>
                     {
+                        string host = hostContext.Configuration["MassTransit:RabbitMQ:Host"];
+                        string virtualHost = hostContext.Configuration["MassTransit:RabbitMQ:VirtualHost"];
+                        string userName = hostContext.Configuration["MassTransit:RabbitMQ:UserName"];
+                        string password = hostContext.Configuration["MassTransit:RabbitMQ:Password"];
+
+                        cfg.Host(host, virtualHost, h => {
+                            h.Username(userName);
+                            h.Password(password);
+                        });
+
                         cfg.ConfigureEndpoints(context);
                     });
                 });
 
                 services.AddHostedService<Worker>();
             });
+
+
 
 }
 

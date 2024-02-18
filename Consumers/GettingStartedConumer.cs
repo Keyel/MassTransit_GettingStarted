@@ -5,8 +5,7 @@ using Contracts;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
-public class GettingStartedConsumer :
-    IConsumer<GettingStarted>
+public class GettingStartedConsumer : IConsumer<GettingStarted>
 {
     readonly ILogger<GettingStartedConsumer> _logger;
 
@@ -17,6 +16,7 @@ public class GettingStartedConsumer :
 
     public Task Consume(ConsumeContext<GettingStarted> context)
     {
+        throw new NotImplementedByDesignException();
         _logger.LogInformation("Received Text: {Text}", context.Message.Value);
         return Task.CompletedTask;
     }
