@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using GettingStarted.Services;
+using Microsoft.Extensions.Configuration;
+using GettingStarted.Options;
 
 namespace GettingStarted;
 
@@ -38,10 +40,17 @@ public class Program
 
                     x.UsingRabbitMq((context, cfg) =>
                     {
-                        string host = hostContext.Configuration["MassTransit:RabbitMQ:Host"];
-                        string virtualHost = hostContext.Configuration["MassTransit:RabbitMQ:VirtualHost"];
-                        string userName = hostContext.Configuration["MassTransit:RabbitMQ:UserName"];
-                        string password = hostContext.Configuration["MassTransit:RabbitMQ:Password"];
+                        MassTransitOptions massTransitOptions = hostContext.Configuration.GetSection("").Get<MassTransitOptions>();
+
+                        //string host = hostContext.Configuration["MassTransit:RabbitMQ:Host"];
+                        //string virtualHost = hostContext.Configuration["MassTransit:RabbitMQ:VirtualHost"];
+                        //string userName = hostContext.Configuration["MassTransit:RabbitMQ:UserName"];
+                        //string password = hostContext.Configuration["MassTransit:RabbitMQ:Password"];
+
+                        string host = massTransitOptions.rabbitMQOptions.Host;
+                        string virtualHost = massTransitOptions.rabbitMQOptions.VirtualHost;
+                        string userName = massTransitOptions.rabbitMQOptions.Username;
+                        string password = massTransitOptions.rabbitMQOptions.Password;
 
                         cfg.Host(host, virtualHost, h => {
                             h.Username(userName);
